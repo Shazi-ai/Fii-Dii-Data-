@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FII DII Data Activity | Track Institutional Investments</title>
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- html2canvas for snapshot download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1e40af;
+      --secondary: #4b5563;
+      --success: #10b981;
+      --danger: #ef4444;
+      --light-bg: #f8fafc;
+      --dark-bg: #1e293b;
+      --accent: #6366f1; /* Purple for AI vibe */
+      --neon: #0ea5e9;   /* Neon blue for highlights */
+    }
+    /* Base Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--light-bg);
+      color: #1e293b;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      padding-top: 80px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .navbar {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 1rem;
+      transition: background 0.3s;
+    }
+    .navbar-brand {
+      font-weight: 800;
+      color: var(--primary) !important;
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+    .nav-link {
+      color: #64748b !important;
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      transition: color 0.3s;
+    }
+    .nav-link:hover {
+      color: var(--primary) !important;
+    }
+    .dropdown-menu a {
+      color: #1e293b;
+      transition: color 0.3s;
+    }
+    .dropdown-menu a:hover {
+      color: var(--primary);
+    }
+    .form-switch .form-check-input {
+      width: 2.5em;
+      height: 1.5em;
+      margin-left: -2.5em;
+      cursor: pointer;
+    }
+    .form-switch .form-check-input:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    .form-switch .form-check-label {
+      margin-left: 2.8em;
+      cursor: pointer;
+    }
+    /* Header Styles */
+    .header {
+      padding: 40px 0 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+    }
+    .header p {
+      font-size: 1.3rem;
+      color: #64748b;
+      max-width: 900px;
+      margin: 0 auto 1rem;
+    }
+    /* Stat Row */
+    .stat-row {
+      margin-top: 2rem;
+    }
+    .stat-box {
+      background: white;
+      padding: 1.75rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: background 0.3s;
+      border-left: 4px solid var(--accent);
+    }
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin: 0.75rem 0;
+    }
+    /* Share Container */
+    .share-container {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .share-container span {
+      font-weight: 600;
+      color: #4b5563;
+      font-size: 1.2rem;
+    }
+    .share-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .share-icon:hover {
+      transform: scale(1.2);
+      color: var(--accent);
+    }
+    .download-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .download-btn:hover {
+      background: var(--accent);
+      transform: scale(1.05);
+    }
+    .download-btn:active {
+      transform: scale(0.95);
+    }
+    .download-select {
+      margin-left: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      background: #fff;
+      font-size: 1rem;
+    }
+    /* Card & Table Styles */
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 30px;
+      background: white;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-header {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 700;
+      color: #1e293b;
+      padding: 1.5rem;
+      border-radius: 16px 16px 0 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    .table {
+      margin-bottom: 0;
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
+    }
+    .table thead th {
+      background-color: #f8fafc;
+      color: #64748b;
+      font-weight: 600;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 1.5rem;
+      transition: background 0.3s, color 0.3s;
+    }
+    .table td {
+      vertical-align: middle;
+      padding: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    .table tbody tr:hover {
+      background: #f1f5f9;
+      transition: background 0.2s;
+    }
+    .net-positive {
+      color: var(--success) !important;
+      font-weight: 600;
+    }
+    .net-negative {
+      color: var(--danger) !important;
+      font-weight: 600;
+    }
+    .chart-container {
+      height: 400px;
+      position: relative;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+    /* Article Section */
+    .article-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 4rem 0;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: background 0.3s, color 0.3s;
+    }
+    .article-section h2 {
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 1.5rem;
+      transition: color 0.3s;
+    }
+    .article-section h3 {
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .article-section p,
+    .article-section li {
+      font-size: 1rem;
+      color: #4b5563;
+      transition: color 0.3s;
+    }
+    /* Footer */
+    footer {
+      background: #1e293b;
+      padding: 2rem;
+      margin-top: 4rem;
+      text-align: center;
+      color: #ffffff;
+      font-size: 0.95rem;
+      transition: background 0.3s;
+    }
+    .footer-links a {
+      color: #f8fafc;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+    .scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      opacity: 0;
+      visibility: hidden;
+    }
+    .scroll-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    /* Dark Mode */
+    .dark-mode {
+      background-color: var(--dark-bg);
+      color: #f8fafc;
+    }
+    .dark-mode .text-muted {
+      color: #cbd5e1 !important;
+    }
+    .dark-mode .text-success {
+      color: var(--success) !important;
+    }
+    .dark-mode .text-danger {
+      color: var(--danger) !important;
+    }
+    .dark-mode .navbar {
+      background: var(--dark-bg);
+      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+    }
+    .dark-mode .navbar-brand {
+      color: var(--success) !important;
+    }
+    .dark-mode .nav-link {
+      color: #f8fafc !important;
+    }
+    .dark-mode .dropdown-menu {
+      background: var(--dark-bg);
+      border-color: #475569;
+    }
+    .dark-mode .dropdown-menu a {
+      color: #f8fafc;
+    }
+    .dark-mode .dropdown-menu a:hover {
+      color: var(--primary);
+    }
+    .dark-mode .header {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #312e81 100%);
+    }
+    .dark-mode .header h1 {
+      color: #f8fafc;
+    }
+    .dark-mode .header p {
+      color: #cbd5e1;
+    }
+    .dark-mode .stat-box {
+      background: var(--dark-bg);
+      border-left-color: var(--neon);
+    }
+    .dark-mode .card {
+      background: #334155;
+      border-color: #475569;
+    }
+    .dark-mode .card-header {
+      background: var(--dark-bg);
+      border-bottom: 1px solid #475569;
+      color: #f8fafc;
+    }
+    .dark-mode .table thead th {
+      background-color: var(--dark-bg);
+      color: #f8fafc;
+    }
+    .dark-mode .table td {
+      border-top: 1px solid #475569;
+    }
+    .dark-mode .table tbody tr:hover {
+      background: #475569;
+    }
+    .dark-mode .article-section {
+      background: var(--dark-bg);
+      border-color: #475569;
+      color: #f8fafc;
+    }
+    .dark-mode .article-section h2,
+    .dark-mode .article-section h3 {
+      color: #f8fafc !important;
+    }
+    .dark-mode .article-section p {
+      color: #cbd5e1 !important;
+    }
+    .dark-mode .footer-links a {
+      color: #f8fafc;
+    }
+    .dark-mode footer {
+      background: #0f172a;
+    }
+    .dark-mode .navbar-toggler-icon {
+      filter: invert(1);
+    }
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      .header p {
+        font-size: 1rem;
+      }
+      .stat-value {
+        font-size: 1.8rem;
+      }
+      .share-container {
+        flex-direction: column;
+      }
+      .share-icon {
+        font-size: 1.8rem;
+      }
+      .download-btn {
+        margin-top: 1rem;
+      }
+      .table thead th, .table td {
+        padding: 1rem;
+      }
+      .card {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbar">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <i class="fas fa-chart-line me-2"></i>FII DII DATA
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link active" href="#home">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#fii">FII Activity</a></li>
+          <li class="nav-item"><a class="nav-link" href="#dii">DII Activity</a></li>
+          <li class="nav-item"><a class="nav-link" href="#trends">Trends</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <!-- Dropdown for Info Pages -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Info
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="infoDropdown">
+              <li><a class="dropdown-item" href="about.html">About Us</a></li>
+              <li><a class="dropdown-item" href="privacy.html">Privacy Policy</a></li>
+              <li><a class="dropdown-item" href="contact.html">Contact Us</a></li>
+            </ul>
+          </li>
+          <!-- Dark Mode Toggle -->
+          <li class="nav-item ms-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="darkModeToggle">
+              <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="header" id="home">
+    <div class="container text-center">
+      <h1>FII DII Data</h1>
+      <p class="mb-3">Track Foreign and Domestic Institutional Investments with Ease</p>
+      <!-- Latest Data Date and Stats -->
+      <div id="latestDateText" class="mb-4 text-muted"></div>
+      <!-- Stat Row -->
+      <div class="row justify-content-center g-4 stat-row" id="snapshotArea">
+        <div class="col-md-5 col-lg-4">
+          <div class="stat-box">
+            <div class="text-muted">FII Net Buy</div>
+            <div class="stat-value" id="headerFii"></div>
+            <div class="text-success small" id="fiiChangeText"></div>
+          </div>
+        </div>
+        <div class="col-md-5 col-lg-4">
+          <div class="stat-box">
+            <div class="text-muted">DII Net Buy</div>
+            <div class="stat-value" id="headerDii"></div>
+            <div class="text-danger small" id="diiChangeText"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Simplified Share Section with Icons Only -->
+      <div class="share-container">
+        <span>Share:</span>
+        <i class="fab fa-facebook-square share-icon" onclick="shareOnFacebook()" data-bs-toggle="tooltip" title="Share on Facebook"></i>
+        <i class="fab fa-twitter-square share-icon" onclick="shareOnTwitter()" data-bs-toggle="tooltip" title="Share on Twitter"></i>
+        <i class="fab fa-linkedin share-icon" onclick="shareOnLinkedIn()" data-bs-toggle="tooltip" title="Share on LinkedIn"></i>
+        <i class="fab fa-whatsapp-square share-icon" onclick="shareOnWhatsApp()" data-bs-toggle="tooltip" title="Share on WhatsApp"></i>
+        <i class="fab fa-instagram-square share-icon" onclick="copyLinkForInstagram()" data-bs-toggle="tooltip" title="Copy link for Instagram"></i>
+        <i class="fab fa-telegram share-icon" onclick="shareOnTelegram()" data-bs-toggle="tooltip" title="Share on Telegram"></i>
+        <i class="fas fa-link share-icon" onclick="copyLink()" data-bs-toggle="tooltip" title="Copy Link"></i>
+        <!-- Download Options -->
+        <button class="download-btn" onclick="downloadSnapshot()">
+          <i class="fas fa-download"></i> Download Snapshot
+        </button>
+        <select id="downloadFormat" class="download-select">
+          <option value="PNG">PNG</option>
+          <option value="JPEG">JPEG</option>
+          <option value="CSV">CSV</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <div class="row g-4">
+      <!-- FII Table -->
+      <div class="col-lg-6" id="fii">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-globe me-2"></i>FII Activity
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date (Day)</th>
+                    <th class="text-end">Buy (₹ Cr)</th>
+                    <th class="text-end">Sell (₹ Cr)</th>
+                    <th class="text-end">Net (₹ Cr)</th>
+                  </tr>
+                </thead>
+                <tbody id="fiiTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- DII Table -->
+      <div class="col-lg-6" id="dii">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-landmark me-2"></i>DII Activity
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date (Day)</th>
+                    <th class="text-end">Buy (₹ Cr)</th>
+                    <th class="text-end">Sell (₹ Cr)</th>
+                    <th class="text-end">Net (₹ Cr)</th>
+                  </tr>
+                </thead>
+                <tbody id="diiTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Chart -->
+      <div class="col-12" id="trends">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-chart-line me-2"></i>Investment Trends
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="investmentChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Article Sections -->
+      <div class="col-12" id="features">
+        <div class="article-section">
+          <h2>Understanding Institutional Investments</h2>
+          <p>Foreign Institutional Investors (FIIs) and Domestic Institutional Investors (DIIs) play a crucial role in shaping market trends. Our platform provides real-time data, historical performance analysis, and smart alerts to help you identify opportunities and make informed decisions. Explore our advanced tools to stay ahead in the dynamic market environment.</p>
+          <p>Foreign Institutional Investors (FIIs) and Domestic Institutional Investors (DIIs) play a crucial role in shaping market trends. Our platform provides:</p>
+          <ul>
+            <li><i class="fas fa-clock"></i> Real-time tracking of investment patterns</li>
+            <li><i class="fas fa-history"></i> Historical performance analysis</li>
+            <li><i class="fas fa-bell"></i> Smart alert system for significant changes</li>
+          </ul>
+          <p>With our advanced tools, you can monitor market movements, identify opportunities, and make informed decisions based on institutional behavior.</p>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="article-section">
+          <h2>Understanding FII DII Data</h2>
+          <p>FII DII data is basically a snapshot of how much foreign and domestic institutions are buying or selling in the stock market. FIIs are the big money managers from abroad who invest in Indian stocks. Think mutual funds, hedge funds, pension funds, etc. based outside India. DIIs, on the other hand, are homegrown players like domestic mutual funds, insurance companies, banks and other financial institutions that deploy funds in Indian equities.</p>
+          <p>Foreign Institutional Investors (FIIs) are entities from outside India that invest in financial markets.</p>
+          <p>Domestic Institutional Investors (DIIs), on the other hand, are institutions based within the country, such as domestic mutual funds, insurance companies, and pension funds.</p>
+          <p>The stock exchanges, NSE and BSE, collect and report this data on a daily basis after market hours. The data shows the net value of shares bought or sold by FIIs and DIIs for that trading session. Positive net investment values indicate that FIIs/DIIs were net buyers, while negative figures mean they were net sellers for the day.</p>
+          <h3>Understanding FII DII Activity in Cash Segment</h3>
+          <p>As a trader aiming to profit from short-term market movements, analyzing FII DII data is crucial. FII (Foreign Institutional Investors) and DII (Domestic Institutional Investors) are powerful market participants whose trading activity can significantly sway stock prices in the near term. By closely tracking FII DII data, you can gain valuable insights into market sentiment and make more informed trading decisions.</p>
+          <h3>Why is FII DII Data Important for Traders?</h3>
+          <p>Institutional investors are like the Warren Buffets of the market. They manage huge sums of money and their trading activity can sway stock prices big time. When FIIs go on a buying spree, markets usually head north as other investors jump in to ride the momentum. But when they dump stocks en masse, it often sparks a selloff as everyone rushes for the exit.</p>
+          <p>Here's a real-life example. During the March 2020 crash triggered by the COVID-19 pandemic, FIIs pulled out a record Rs 61,973 crore from Indian equities, sending the Sensex and Nifty tumbling by over 20%. However, as FIIs turned net buyers in the following months, the markets staged a spectacular recovery, with the Sensex scaling new highs. This shows the kind of impact FII flows can have on market direction.</p>
+          <p>DIIs also play a key role in shaping market trends. Being local investors, they tend to have a longer-term view and often act as a counterbalance to FII activity. For instance, when FIIs are on a selling spree, DIIs may step in to buy stocks at lower levels, providing some support to the market.</p>
+          <p>The FII DII activities serve as a barometer for market sentiment. When FIIs are net buyers, it often indicates positive foreign interest in the country's markets, suggesting bullish sentiment. Conversely, when they are net sellers, it might signal caution or bearish sentiment. DIIs, being local entities, might have a better understanding of domestic factors influencing the markets, and their buying or selling patterns can provide valuable insights.</p>
+          <h3>Daily vs Monthly FII DII Data</h3>
+          <p><strong>Daily FII DII Activity Data</strong><br>
+          Daily FII DII data offers a snapshot of institutional investment activity on a day-to-day basis. This data is crucial for short-term traders who need to make quick decisions based on the latest market trends. Daily data helps in identifying sudden shifts in market sentiment and can be a leading indicator for market movements.</p>
+          <p><strong>Monthly FII DII Activity Data</strong><br>
+          Monthly data aggregates the daily activities, providing a broader view of investment trends. This is particularly useful for long-term investors who seek to understand sustained trends rather than daily fluctuations. Monthly data helps in identifying patterns and trends that might not be visible in the daily data, such as long-term bullish or bearish sentiments.</p>
+          <h3>How to Interpret FII DII Activity?</h3>
+          <p>There are several ways to analyze FII DII data to gauge the market sentiment and trend:</p>
+          <ul>
+            <li><strong>Daily Net FII DII Investment:</strong> The net buying or selling figures published at the end of each trading day provide a snapshot of institutional activity for that session. Comparing this data with the day's price action can show how the broader market is responding to FII/DII flows.</li>
+            <li><strong>Cumulative FII DII Activity Over a Period:</strong> Aggregating the daily net investment data over a week, month, or quarter can reveal broader trends in FII and DII positioning. If FIIs, for example, have been consistently buying for several weeks, it indicates a bullish undertone to the market.</li>
+            <li><strong>FII DII Intensity Compared to Market Volume:</strong> Measuring the proportion of total market turnover accounted for by FII and DII can indicate how active they are in driving trading volumes and liquidity. Higher FII/DII participation relative to overall volume suggests they are dominant players in the market currently.</li>
+          </ul>
+          <h3>FII DII Activity Category Wise</h3>
+          <p>FII and DII are umbrella terms for various sub-categories of institutional investors. Granular data showing net investment by each FII DII sub-category can provide clues on which groups are most active. For example, aggressive buying by foreign mutual funds could mean they are deploying fresh inflows from overseas.</p>
+          <p>You can check daily, weekly, and monthly FII DII data on the NiftyTrader app and website. Click on the link to download the app now.</p>
+          <h3>Bullish Sentiment</h3>
+          <p><strong>Indicators of Bullish Sentiment</strong><br>
+          If the market is rallying and FIIs/DIIs are net buyers, it confirms genuine demand that could sustain the uptrend in the near-term. You can look for long opportunities in such a scenario.</p>
+          <p><strong>Case Study: Historical Bullish Outcomes</strong><br>
+          For example, during certain periods in 2020, FIIs were net buyers, pouring significant capital into Indian equities. This influx of foreign capital helped drive the market to new highs, signaling robust growth expectations. Similarly, DIIs, when showing strong buying activity, can often support or initiate bullish trends, particularly in emerging sectors or during recovery phases.</p>
+          <h3>Bearish Sentiment</h3>
+          <p><strong>Indicators of Bearish Sentiment</strong><br>
+          Conversely, when FIIs and DIIs are net sellers, it indicates a bearish sentiment. Net selling suggests a lack of confidence in market conditions, prompting these investors to withdraw their investments.</p>
+          <p><strong>Case Study: Historical Bearish Outcomes</strong><br>
+          A notable example is the global financial crisis of 2008, where massive FII sell-offs were observed. This exodus of foreign capital led to significant market downturns. Similarly, periods of high DII selling can indicate a bearish outlook, as seen during times of political instability or economic downturns.</p>
+          <h3>Neutral Stance</h3>
+          <p><strong>Indicators of Neutral Stance</strong><br>
+          Sometimes, FII and DIIs activities might be mixed, indicating a neutral market stance. This situation can occur during market consolidation phases, where neither buying nor selling dominates, leading to relatively stable market conditions.</p>
+          <p><strong>Discussion on Market Consolidation</strong><br>
+          Neutral FII DII activity often suggests a wait-and-see approach by institutional investors, typically during periods of uncertainty or when markets are awaiting significant events, such as policy announcements or earnings seasons. During these times, markets might experience low volatility and sideways movement.</p>
+          <h3>Practical Application</h3>
+          <p><strong>Using FII DII Data for Intraday Trading</strong><br>
+          Intraday traders can use real-time or frequently updated FII DII data to validate short-term market moves and take positions accordingly. Let's understand this with a few scenarios:</p>
+          <ul>
+            <li><strong>Scenario 1:</strong> The market is trending higher and FII DII data shows strong net buying. This indicates genuine demand from institutional investors and increases the probability of the uptrend sustaining in the near-term. Intraday traders can look for long opportunities on dips or breakouts, keeping the overall bullish bias in mind.</li>
+            <li><strong>Scenario 2:</strong> The market is seeing a sharp sell-off but FII DII data reveals they are net buyers. This divergence suggests the selling might be overdone and a reversal could be on the cards. Traders can watch for early signs of a bullish reversal, like a hammer candlestick pattern, to initiate long positions for a potential bounce.</li>
+            <li><strong>Scenario 3:</strong> The market is in an uptrend but FII DII data shows consistent selling. This negative divergence is a red flag as it indicates the rally may be losing steam. Traders should be cautious and book profits on existing longs. Fresh long positions should be avoided unless FII DII selling subsides.</li>
+          </ul>
+          <p>However, it's crucial to remember that FII DII data should not be the sole basis for your intraday trades. It should be used in conjunction with price action analysis, technical indicators, and other market data points to get a comprehensive view. Relying only on FII/DII flows can often lead to whipsaws, especially during volatile sessions.</p>
+          <h3>Practical Tips for Integrating FII DII Data with Other Indicators</h3>
+          <ul>
+            <li>Treat FII DII data as a secondary confirmation tool, not the primary trigger for trades. Always give more weightage to price action and technical factors.</li>
+            <li>Be aware of the time lag in FII DII data reporting. While exchanges release provisional data during market hours, the final figures are available only after the closing bell. Avoid trading on intraday FII/DII numbers, which can be quite noisy.</li>
+            <li>Don't get swayed by single-day FII DII data. Institutional flows can be volatile in the short term. Focus on identifying broader trends over a week or month.</li>
+            <li>Combine FII/DII analysis with other sentiment indicators like the put-call ratio, advance-decline ratio, etc. to get a holistic view of market sentiment.</li>
+            <li>Avoid overtrading based on FII DII data. Use it judiciously to add conviction to high-probability setups, not to force trades in every session.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links mb-2">
+        <a href="#home">Home</a> |
+        <a href="about.html">About Us</a> |
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="contact.html">Contact Us</a>
+      </div>
+      <p>© 2025 FII DII Data Activity. All market data sourced from NSE and NSDL.</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top -->
+  <div class="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // Define holiday dates (if any)
+    const HOLIDAYS = [];
+
+    // Data arrays
+    const fiiData = [
+  { date: "2025-04-25", buy: 15524.03, sell: 12571.70, net: 2952.33 },
+  { date: "2025-04-24", buy: 24089.48, sell: 15838.95, net: 8250.53 },
+  { date: "2025-04-23", buy: 17507.28, sell: 14174.35, net: 3332.93 },
+  { date: "2025-04-22", buy: 16702.52, sell: 15412.09, net: 1290.43 },
+  { date: "2025-04-21", buy: 11711.72, sell: 9741.55, net: 1970.17 },
+  { date: "2025-04-17", buy: 18210.41, sell: 13542.47, net: 4667.94 },
+  { date: "2025-04-16", buy: 15286.90, sell: 11350.48, net: 3936.42 },
+  { date: "2025-04-15", buy: 25103.46, sell: 19037.68, net: 6065.78 },
+  { date: "2025-04-11", buy: 18058.90, sell: 20577.93, net: -2519.03 },
+  { date: "2025-04-09", buy: 11959.16, sell: 16317.18, net: -4358.02 },
+  { date: "2025-04-08", buy: 13687.62, sell: 18681.86, net: -4994.24 },
+  { date: "2025-04-07", buy: 13372.27, sell: 22412.28, net: -9040.01 },
+  { date: "2025-04-04", buy: 13946.58, sell: 17430.56, net: -3483.98 },
+  { date: "2025-04-03", buy: 9681.91, sell: 12487.91, net: -2806.00 },
+  { date: "2025-04-02", buy: 12099.11, sell: 13637.99, net: -1538.88 }
+];
+
+const diiData = [
+  { date: "2025-04-25", buy: 16170.72, sell: 12630.87, net: 3539.85 },
+  { date: "2025-04-24", buy: 13452.15, sell: 13986.69, net: -534.54 },
+  { date: "2025-04-23", buy: 15150.83, sell: 16385.29, net: -1234.46 },
+  { date: "2025-04-22", buy: 15154.16, sell: 16039.79, net: -885.63 },
+  { date: "2025-04-21", buy: 15619.61, sell: 15373.02, net: 246.59 },
+  { date: "2025-04-17", buy: 13773.79, sell: 15779.94, net: -2006.15 },
+  { date: "2025-04-16", buy: 11065.94, sell: 13578.71, net: -2512.77 },
+  { date: "2025-04-15", buy: 11259.51, sell: 13211.11, net: -1951.60 },
+  { date: "2025-04-11", buy: 14129.38, sell: 10370.11, net: 3759.27 },
+  { date: "2025-04-09", buy: 13990.17, sell: 11013.51, net: 2976.66 },
+  { date: "2025-04-08", buy: 14363.74, sell: 11266.50, net: 3097.24 },
+  { date: "2025-04-07", buy: 26528.23, sell: 14405.78, net: 12122.45 },
+  { date: "2025-04-04", buy: 14454.32, sell: 16174.64, net: -1720.32 },
+  { date: "2025-04-03", buy: 11567.21, sell: 11345.74, net: 221.47 },
+  { date: "2025-04-02", buy: 11761.90, sell: 8953.07, net: 2808.83 }
+];
+
+    // Helper: Format Date
+    function formatDateWithDay(isoString) {
+      const dateObj = new Date(isoString);
+      const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+      const dayMonth = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
+      return `${isoString} (${weekday}), ${dayMonth}`;
+    }
+
+    // Populate Tables
+    function populateTable(tbodyId, data) {
+      const tbody = document.getElementById(tbodyId);
+      tbody.innerHTML = data.map(item => {
+        if (HOLIDAYS.includes(item.date)) {
+          return `
+            <tr>
+              <td>${formatDateWithDay(item.date)}</td>
+              <td class="text-end">Closed</td>
+              <td class="text-end">Closed</td>
+              <td class="text-end net-negative">Closed</td>
+            </tr>
+          `;
+        }
+        const netSign = item.net >= 0 ? "+" : "-";
+        const netVal = Math.abs(item.net).toLocaleString('en-IN');
+        const netClass = item.net >= 0 ? "net-positive" : "net-negative";
+        return `
+          <tr>
+            <td>${formatDateWithDay(item.date)}</td>
+            <td class="text-end">₹${item.buy.toLocaleString('en-IN')}</td>
+            <td class="text-end">₹${item.sell.toLocaleString('en-IN')}</td>
+            <td class="text-end ${netClass}">${netSign}₹${netVal}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+    populateTable("fiiTableBody", fiiData);
+    populateTable("diiTableBody", diiData);
+
+    // Animation for Stat Values
+    function animateNetValue(id, net, duration) {
+      const sign = net >= 0 ? "+" : "-";
+      const absNet = Math.abs(net);
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const currentValue = Math.floor(progress * absNet);
+        document.getElementById(id).textContent = `${sign}₹${currentValue.toLocaleString('en-IN')} Cr`;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          document.getElementById(id).textContent = `${sign}₹${absNet.toLocaleString('en-IN')} Cr`;
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    // Update Header Figures
+    const latestFii = fiiData[0];
+    const latestDii = diiData[0];
+    const fiiHeaderElem = document.getElementById("headerFii");
+    fiiHeaderElem.classList.add(latestFii.net >= 0 ? "net-positive" : "net-negative");
+    animateNetValue("headerFii", latestFii.net, 2000);
+    const diiHeaderElem = document.getElementById("headerDii");
+    diiHeaderElem.classList.add(latestDii.net >= 0 ? "net-positive" : "net-negative");
+    animateNetValue("headerDii", latestDii.net, 2000);
+
+    const latestDateObj = new Date(latestFii.date);
+    const dayName = latestDateObj.toLocaleDateString('en-US', { weekday: 'long' });
+    const dateName = latestDateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById("latestDateText").textContent = `Latest Data as of ${dayName}, ${dateName}`;
+
+    // Percentage Change
+    const previousFii = fiiData[1];
+    const previousDii = diiData[1];
+    const fiiPctChange = ((latestFii.net - previousFii.net) / Math.abs(previousFii.net)) * 100;
+    const diiPctChange = ((latestDii.net - previousDii.net) / Math.abs(previousDii.net)) * 100;
+    document.getElementById("fiiChangeText").textContent =
+      `${fiiPctChange >= 0 ? "↑" : "↓"} ${Math.abs(fiiPctChange).toFixed(2)}% from previous day`;
+    document.getElementById("diiChangeText").textContent =
+      `${diiPctChange >= 0 ? "↑" : "↓"} ${Math.abs(diiPctChange).toFixed(2)}% from previous day`;
+
+    // Chart Configuration
+    const fiiDataChrono = [...fiiData].reverse();
+    const diiDataChrono = [...diiData].reverse();
+    const ctx = document.getElementById("investmentChart").getContext("2d");
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: fiiDataChrono.map(d => d.date),
+        datasets: [
+          {
+            label: "FII Net (₹ Cr)",
+            data: fiiDataChrono.map(d => d.net),
+            borderColor: "#1e40af",
+            borderWidth: 3,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: "#ffffff",
+            pointBorderWidth: 2
+          },
+          {
+            label: "DII Net (₹ Cr)",
+            data: diiDataChrono.map(d => d.net),
+            borderColor: "#10b981",
+            borderWidth: 3,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: "#ffffff",
+            pointBorderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: { display: true, text: "Date", color: "#64748b", font: { weight: "600" } },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: true, text: "Net Investment (₹ Cr)", color: "#64748b", font: { weight: "600" } },
+            grid: { color: "#e2e8f0" }
+          }
+        },
+        elements: {
+          line: { tension: 0.4, borderWidth: 3 },
+          point: { radius: 5, backgroundColor: '#ffffff', borderWidth: 2 }
+        },
+        plugins: {
+          legend: {
+            labels: { color: "#1e293b", font: { weight: "600" }, usePointStyle: true },
+            position: "top"
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const label = context.dataset.label || "";
+                const val = context.parsed.y;
+                const sign = val >= 0 ? "+" : "-";
+                const absVal = Math.abs(val).toLocaleString("en-IN");
+                return `${label}: ${sign}₹${absVal} Cr`;
+              }
+            }
+          }
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        }
+      }
+    });
+
+    // Social Share Functions
+    function shareOnFacebook() {
+      window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href), "_blank");
+    }
+    function shareOnTwitter() {
+      window.open("https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.href) + "&text=" + encodeURIComponent(document.title), "_blank");
+    }
+    function shareOnLinkedIn() {
+      window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(window.location.href), "_blank");
+    }
+    function shareOnWhatsApp() {
+      window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(document.title + " " + window.location.href), "_blank");
+    }
+    function shareOnTelegram() {
+      window.open("https://t.me/share/url?url=" + encodeURIComponent(window.location.href) + "&text=" + encodeURIComponent(document.title), "_blank");
+    }
+    function copyLinkForInstagram() {
+      copyLink();
+      alert("Link copied! Paste it into your Instagram post or story.");
+    }
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("Link copied to clipboard!");
+      });
+    }
+
+    // Download Snapshot Function
+    function downloadSnapshot() {
+      const format = document.getElementById("downloadFormat").value;
+      if (format === "CSV") {
+        const row = fiiData[0];
+        const dRow = diiData[0];
+        let csvContent = "Date,FII Buy,FII Sell,FII Net,DII Buy,DII Sell,DII Net\n";
+        csvContent += `${row.date},${row.buy},${row.sell},${row.net},${dRow.buy},${dRow.sell},${dRow.net}\n`;
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", "latest_snapshot.csv");
+        link.click();
+      } else {
+        html2canvas(document.getElementById("snapshotArea")).then(canvas => {
+          const ctx = canvas.getContext("2d");
+          const watermarkText = "FIIDIIDATA.io";
+          ctx.font = "20px Inter";
+          ctx.fillStyle = "rgba(0,0,0,0.3)";
+          ctx.textAlign = "right";
+          ctx.fillText(watermarkText, canvas.width - 10, canvas.height - 10);
+          let imageData;
+          if (format === "JPEG") {
+            imageData = canvas.toDataURL("image/jpeg");
+          } else {
+            imageData = canvas.toDataURL("image/png");
+          }
+          const link = document.createElement("a");
+          link.setAttribute("href", imageData);
+          link.setAttribute("download", `latest_snapshot.${format.toLowerCase()}`);
+          link.click();
+        });
+      }
+    }
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    darkModeToggle.addEventListener("change", function() {
+      document.body.classList.toggle("dark-mode", this.checked);
+    });
+
+    // Scroll-to-top Button
+    const scrollButton = document.querySelector(".scroll-to-top");
+    window.addEventListener("scroll", () => {
+      scrollButton.classList.toggle("show", window.scrollY > 300);
+    });
+
+    // Initialize Tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  </script>
+</body>
+</html>
