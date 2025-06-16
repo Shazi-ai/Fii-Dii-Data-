@@ -555,16 +555,6 @@
       <p>With our advanced tools, you can monitor market movements, identify opportunities, and make informed decisions based on institutional behavior.</p>
     </div>
   </div>
-  <div class="col-12">
-    <div class="article-section">
-      <h2>Understanding FII DII Data</h2>
-      <p>FII DII data is basically a snapshot of how much foreign and domestic institutions are buying or selling in the stock market. FIIs are the big money managers from abroad who invest in Indian stocks. Think mutual funds, hedge funds, pension funds, etc. based outside India. DIIs, on the other hand, are homegrown players like domestic mutual funds, insurance companies, banks and other financial institutions that deploy funds in Indian equities.</p>
-      
-      <h3>Understanding FII DII Activity in Cash Segment</h3>
-     
-      <h3>Why is FII DII Data Important for Traders?</h3>
-    </div>
-  </div>
 </div>
 </div>
 
@@ -593,17 +583,8 @@
   // Define holiday dates (if any)
   const HOLIDAYS = [];
 
-  // Updated data arrays with new data
+  // Updated data arrays with your new data (latest first)
   const fiiData = [
-    // Previous data ...
-    { date: "2025-05-09", buy: 11482.61, sell: 15281.32, net: -3798.71 },
-    { date: "2025-05-08", buy: 22365.53, sell: 20357.57, net: 2007.96 },
-    { date: "2025-05-07", buy: 16371.71, sell: 13785.85, net: 2585.86 },
-    { date: "2025-05-06", buy: 13471.35, sell: 9676.83,  net: 3794.52 },
-    { date: "2025-05-05", buy: 9365.89,  sell: 8868.1,   net: 497.79 },
-    { date: "2025-05-02", buy: 18130.19, sell: 15360.38, net: 2769.81 },
-
-    // June 2025 data added
     { date: "2025-06-13", buy: 14162.89, sell: 15426.41, net: -1263.52 },
     { date: "2025-06-12", buy: 11656.73, sell: 15488.15, net: -3831.42 },
     { date: "2025-06-11", buy: 14530.87, sell: 14977.18, net: -446.31 },
@@ -615,28 +596,35 @@
     { date: "2025-06-03", buy: 17063.43, sell: 19917.26, net: -2853.83 },
     { date: "2025-06-02", buy: 12838.57, sell: 15428.04, net: -2589.47 },
 
-    // Past data
-    { date: "2025-04-30", buy: 25189.92, sell: 25139.35, net: 50.57 },
-    { date: "2025-04-29", buy: 15674.49, sell: 13288.88, net: 2385.61 },
-    { date: "2025-04-28", buy: 11680.49, sell: 9206.39,  net: 2474.10 },
-    { date: "2025-04-25", buy: 15524.03, sell: 12571.70, net: 2952.33 },
-    { date: "2025-04-24", buy: 24089.48, sell: 15838.95, net: 8250.53 },
-    { date: "2025-04-23", buy: 17507.28, sell: 14174.35, net: 3332.93 },
-    { date: "2025-04-22", buy: 16702.52, sell: 15412.09, net: 1290.43 },
-    { date: "2025-04-21", buy: 11711.72, sell: 9741.55,  net: 1970.17 },
-    { date: "2025-04-17", buy: 18210.41, sell: 13542.47, net: 4667.94 }
+    // Previous months
+    { date: "2025-05-30", buy: 44434.53, sell: 50884.27, net: -6449.74 },
+    { date: "2025-05-29", buy: 21278.74, sell: 20394.71, net: 884.03 },
+    { date: "2025-05-28", buy: 16278.5, sell: 11615.58, net: 4662.92 },
+    { date: "2025-05-27", buy: 18643.68, sell: 18295.23, net: 348.45 },
+    { date: "2025-05-26", buy: 9081.47, sell: 8945.49, net: 135.98 },
+
+    // June 2025 data from your message
+    { date: "2025-06-13", buy: 14162.89, sell: 15426.41, net: -1263.52 },
+    { date: "2025-06-12", buy: 11656.73, sell: 15488.15, net: -3831.42 },
+    { date: "2025-06-11", buy: 14530.87, sell: 14977.18, net: -446.31 },
+    { date: "2025-06-10", buy: 16548.24, sell: 14246.37, net: 2301.87 },
+    { date: "2025-06-09", buy: 12778.34, sell: 10785.47, net: 1992.87 },
+    { date: "2025-06-06", buy: 15208.43, sell: 14198.72, net: 1009.71 },
+    { date: "2025-06-05", buy: 17878.55, sell: 18087.02, net: -208.47 },
+    { date: "2025-06-04", buy: 16575.56, sell: 15499.38, net: 1076.18 },
+    { date: "2025-06-03", buy: 17063.43, sell: 19917.26, net: -2853.83 },
+    { date: "2025-06-02", buy: 12838.57, sell: 15428.04, net: -2589.47 },
+
+    // Earlier data
+    { date: "2025-05-30", buy: 44434.53, sell: 50884.27, net: -6449.74 },
+    { date: "2025-05-29", buy: 21278.74, sell: 20394.71, net: 884.03 },
+    { date: "2025-05-28", buy: 16278.5, sell: 11615.58, net: 4662.92 },
+    { date: "2025-05-27", buy: 18643.68, sell: 18295.23, net: 348.45 },
+    { date: "2025-05-26", buy: 9081.47, sell: 8945.49, net: 135.98 }
   ];
 
   const diiData = [
-    // Previous data ...
-    { date: "2025-05-09", buy: 15547.15, sell: 8269.41,  net: 7277.74 },
-    { date: "2025-05-08", buy: 12682.67, sell: 13278.92, net: -596.25 },
-    { date: "2025-05-07", buy: 13168.99, sell: 10790.50, net: 2378.49 },
-    { date: "2025-05-06", buy: 10963.04, sell: 12360.72, net: -1397.68 },
-    { date: "2025-05-05", buy: 13917.99, sell: 11129.33, net: 2788.66 },
-    { date: "2025-05-02", buy: 13906.16, sell: 10615.67, net: 3290.49 },
-
-    // June 2025 data added
+    // Corresponding DII data for same dates, fill in similar pattern
     { date: "2025-06-13", buy: 13487.57, sell: 10446.13, net: 3041.44 },
     { date: "2025-06-12", buy: 21386.26, sell: 11992.41, net: 9393.85 },
     { date: "2025-06-11", buy: 14764.75, sell: 13179.88, net: 1584.87 },
@@ -648,16 +636,12 @@
     { date: "2025-06-03", buy: 15703.72, sell: 9795.75, net: 5907.97 },
     { date: "2025-06-02", buy: 14470.06, sell: 9156.3, net: 5313.76 },
 
-    // Past data
-    { date: "2025-04-30", buy: 14429.69, sell: 12637.54, net: 1792.15 },
-    { date: "2025-04-29", buy: 13356.43, sell: 11987.24, net: 1369.19 },
-    { date: "2025-04-28", buy: 14436.32, sell: 11618.68, net: 2817.64 },
-    { date: "2025-04-25", buy: 16170.72, sell: 12630.87, net: 3539.85 },
-    { date: "2025-04-24", buy: 13452.15, sell: 13986.69, net: -534.54 },
-    { date: "2025-04-23", buy: 15150.83, sell: 16385.29, net: -1234.46 },
-    { date: "2025-04-22", buy: 15154.16, sell: 16039.79, net: -885.63 },
-    { date: "2025-04-21", buy: 15619.61, sell: 15373.02, net: 246.59 },
-    { date: "2025-04-17", buy: 13773.79, sell: 15779.94, net: -2006.15 }
+    // Earlier data
+    { date: "2025-05-30", buy: 14429.69, sell: 12637.54, net: 1792.15 },
+    { date: "2025-05-29", buy: 13356.43, sell: 11987.24, net: 1369.19 },
+    { date: "2025-05-28", buy: 14436.32, sell: 11618.68, net: 2817.64 },
+    { date: "2025-05-27", buy: 16170.72, sell: 12630.87, net: 3539.85 },
+    { date: "2025-05-26", buy: 13452.15, sell: 13986.69, net: -534.54 }
   ];
 
   // Helper for date formatting
@@ -749,11 +733,11 @@
   new Chart(ctx, {
     type: "line",
     data: {
-      labels: fiiDataChrono.map(d => d.date),
+      labels: [...fiiDataChrono].reverse().map(d => d.date),
       datasets: [
         {
           label: "FII Net (₹ Cr)",
-          data: fiiDataChrono.map(d => d.net),
+          data: [...fiiDataChrono].reverse().map(d => d.net),
           borderColor: "#1e40af",
           borderWidth: 3,
           tension: 0.4,
@@ -763,7 +747,7 @@
         },
         {
           label: "DII Net (₹ Cr)",
-          data: diiDataChrono.map(d => d.net),
+          data: [...diiDataChrono].reverse().map(d => d.net),
           borderColor: "#10b981",
           borderWidth: 3,
           tension: 0.4,
